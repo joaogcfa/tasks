@@ -26,7 +26,7 @@ def delete_task(request, pk):
     return HttpResponse(serializer_json, content_type="application/json", status=status.HTTP_200_OK)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def get_or_post(request):
 
     if request.method == 'GET':
