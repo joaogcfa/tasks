@@ -41,4 +41,4 @@ def task_detail(request, pk):
 def get_task(request):
     get_task = Task.objects.all()
     serializer_json = serializers.serialize("json", get_task)
-    return HttpResponse(serializer_json, content_type="application/json", status=status.HTTP_200_CREATED)
+    return HttpResponse(serializer_json, content_type="application/json", status=status.HTTP_201_CREATED)
