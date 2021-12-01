@@ -14,24 +14,31 @@ def index(request):
     return HttpResponse("Hello, world. You're at the tasks index.")
 
 
-@api_view(["GET"])
-def get_tasks(request):
-    tasks = Task.objects.all()
-    tasks_json = serializers.serialize("json", tasks)
-    return HttpResponse(tasks_json, content_type="application/json")
+@api_view(['POST', 'DELETE'])
+def task_detail(request, pk):
+    """
+    Retrieve, update or delete a code snippet.
+    """
+    try:
+        task = Task.objects.get(pk=pk)
+    except Task.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'POST':
+        serializer = TaskSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return HttpResponse(request.data, content_type="application/json", status=status.HTTP_201_CREATED)
+        return HttpResponse(request.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        task.delete()
+        serializer_json = serializers.serialize("json", task)
+        return HttpResponse(serializer_json, content_type="application/json", status=status.HTTP_20)
 
 
-@api_view(["POST"])
-def post_task(request):
-    dataJson = JSONParser().parse(request)
-    serializer = TaskSerializer(data=dataJson)
-    if serializer.is_valid():
-        serializer.save()
-        return JsonResponse(serializer.data, status=201)
-    return JsonResponse(serializer.errors, status=400)
-
-
-@api_view(["DELETE"])
-def del_task(request):
-    Task.objects.all().delete()
-    return Response({"message": "Tasks deleted!"})
+@api_view(['GET'])
+def get_task(request):
+    get_task = Task.objects.all()
+    serializer_json = serializers.serialize("json", get_task)
+    return HttpResponse(serializer_json, content_type="application/json", status=status.HTTP_200_CREATED)
