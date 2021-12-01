@@ -22,7 +22,7 @@ def delete_task(request, pk):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     task.delete()
-    return HttpResponse("Task deletada com sucesso", status=status.HTTP_200_OK)
+    return HttpResponse({"message": "Task deletada com sucesso"}, status=status.HTTP_200_OK)
 
 
 @api_view(['GET', 'POST'])
