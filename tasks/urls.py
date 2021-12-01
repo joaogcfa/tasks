@@ -7,4 +7,7 @@ from rest_framework.authtoken import views
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('', views.index, name='index'),
+    path('GET', views.tasks, name='get_tasks'),
+    path('ADD', views.add, name='post_task'),
+    path('DELETE', views.delete, name='del_task'),
 ]
